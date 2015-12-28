@@ -1,4 +1,4 @@
-﻿/*
+/*
 	jQuery Text Resizer plugin.
 	
 	Author: Mario J Vargas (angstrey at hotmail dot com)

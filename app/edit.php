@@ -1,22 +1,10 @@
-<?php  //TEMP
-	$defaultmonth = date('m');
-	$defaultday = date('d');
-	$defaulthour = date('H');
-	$defaultyear = date('Y');
-	$defaultminute = date('i');
-	if ($defaultmonth==12) {
-		$defaultmonth=01;
-	}else{
-		$defaultmonth++;
-	}
-?>
-
 <div class="wrap">
 	<div class="icon32" id="icon-edit-comments"><br></div>
 	<h2>Επεξεργασία Διαβουλεύσεων</h2>
 	
 	<?php if(isset($_POST['consultation_edit'])) { ?>
 		<div class="updated fade below-h2" id="message"><p>
+			<?php update_consultation(); ?>
 			H Διαβούλευση <em><?php echo get_cat_name($_GET['cons']); ?></em> Αναβαθμίστηκε.	
 		</p></div>
 	<?php	} ?>
@@ -37,14 +25,36 @@
 		</p></div>
 	<?php	} ?>
 	
-	<?php if(isset($_GET['cons']) && (!isset($_GET['open']))&& (!isset($_GET['close']))){ ?>
+	<?php if(isset($_GET['cons']) && (!isset($_GET['open']))&& (!isset($_GET['close']))){ 
+		$consultation = get_category($_GET['cons']); 
+		$datez = explode('@', $consultation->description);
+		
+		$date_hour = explode(' ', $datez[0]);
+		$date_split = explode('-', $date_hour[0]);
+		$hour_split = explode(':', $date_hour[1]);
+		$defaultyear = $date_split[0];
+		$defaultmonth = $date_split[1];
+		$defaultday = $date_split[2];
+		$defaulthour =  $hour_split[0];
+		$defaultminute =  $hour_split[1];
+		
+		$date_hour = explode(' ', $datez[1]);
+		$date_split = explode('-', $date_hour[0]);
+		$hour_split = explode(':', $date_hour[1]);
+		$defaultyear_end = $date_split[0];
+		$defaultmonth_end = $date_split[1];
+		$defaultday_end = $date_split[2];
+		$defaulthour_end =  $hour_split[0];
+		$defaultminute_end =  $hour_split[1];
+	
+	?>
 		<form action="#" method="post" enctype="multipart/form-data" name="consultation_form" id="blocks_form">
 		
 			<table class="form-table">
 				<tbody>
 					<tr valign="top">
 						<th scope="row">Τίτλος: </th>
-						<td><?php echo get_cat_name($_GET['cons']); ?> <em>[<a href="<?php echo URL; ?>/wp-admin/categories.php?action=edit&cat_ID=<?php echo $_GET['cons']; ?>">Αλλαγή</a>] </em></td>
+						<td><?php echo get_cat_name($_GET['cons']); ?> <em>[<a href="<?php echo URL; ?>/wp-admin/edit-tags.php?action=edit&taxonomy=category&tag_ID=<?php echo $_GET['cons']; ?>">Αλλαγή</a>] </em></td>
 					</tr>				
 				</tbody>
 			</table>
@@ -54,7 +64,7 @@
 					<tr valign="top">
 						<th scope="row">Ενέργεια: </th>
 						<td>
-							<?php if(is_open($_GET['cons'])) { ?>
+							<?php if(!is_open($_GET['cons'])) { ?>
 							[<a href="<?php echo URL; ?>/wp-admin/admin.php?page=edit-consultation-handle&cons=<?php echo $_GET['cons']; ?>&open=1">Άνοιγμα</a>] 
 							<?php } else { ?> [<a href="<?php echo URL; ?>/wp-admin/admin.php?page=edit-consultation-handle&cons=<?php echo $_GET['cons']; ?>&close=1">Κλείσιμο</a>]
 							<?php } ?>
@@ -108,35 +118,35 @@
 					<tr valign="top">
 						<th scope="row">Ημερομηνία Λήξης</th>
 						<td>
-							<input type="text" size="2" value="<?php echo $defaultday; ?>" name="expirationdate_day" id="expirationdate_day" >,
+							<input type="text" size="2" value="<?php echo $defaultday_end; ?>" name="expirationdate_day" id="expirationdate_day" >,
 
 							<select id="expirationdate_month" name="expirationdate_month">
-								<option value="01" <?php if($defaultmonth==01) echo 'selected="selected"'; ?>>Ιανουαρίου</option>
-								<option value="02" <?php if($defaultmonth==02) echo 'selected="selected"'; ?>>Φεβρουαρίου</option>
-								<option value="03" <?php if($defaultmonth==03) echo 'selected="selected"'; ?>>Μαρτίου</option>
-								<option value="04" <?php if($defaultmonth==04) echo 'selected="selected"'; ?>>Απριλίου</option>
-								<option value="05" <?php if($defaultmonth==05) echo 'selected="selected"'; ?>>Μαΐου</option>
-								<option value="06" <?php if($defaultmonth==06) echo 'selected="selected"'; ?>>Ιουνίου</option>
-								<option value="07" <?php if($defaultmonth==07) echo 'selected="selected"'; ?>>Ιουλίου</option>
-								<option value="08" <?php if($defaultmonth==08) echo 'selected="selected"'; ?>>Αυγούστου</option>
-								<option value="09" <?php if($defaultmonth==09) echo 'selected="selected"'; ?>>Σεπτεμβρίου</option>
-								<option value="10" <?php if($defaultmonth==10) echo 'selected="selected"'; ?>>Οκτωβρίου</option>
-								<option value="11" <?php if($defaultmonth==11) echo 'selected="selected"'; ?>>Νοεμβρίου</option>
-								<option value="12" <?php if($defaultmonth==12) echo 'selected="selected"'; ?>>Δεκεμβρίου</option>
+								<option value="01" <?php if($defaultmonth_end==01) echo 'selected="selected"'; ?>>Ιανουαρίου</option>
+								<option value="02" <?php if($defaultmonth_end==02) echo 'selected="selected"'; ?>>Φεβρουαρίου</option>
+								<option value="03" <?php if($defaultmonth_end==03) echo 'selected="selected"'; ?>>Μαρτίου</option>
+								<option value="04" <?php if($defaultmonth_end==04) echo 'selected="selected"'; ?>>Απριλίου</option>
+								<option value="05" <?php if($defaultmonth_end==05) echo 'selected="selected"'; ?>>Μαΐου</option>
+								<option value="06" <?php if($defaultmonth_end==06) echo 'selected="selected"'; ?>>Ιουνίου</option>
+								<option value="07" <?php if($defaultmonth_end==07) echo 'selected="selected"'; ?>>Ιουλίου</option>
+								<option value="08" <?php if($defaultmonth_end==08) echo 'selected="selected"'; ?>>Αυγούστου</option>
+								<option value="09" <?php if($defaultmonth_end==09) echo 'selected="selected"'; ?>>Σεπτεμβρίου</option>
+								<option value="10" <?php if($defaultmonth_end==10) echo 'selected="selected"'; ?>>Οκτωβρίου</option>
+								<option value="11" <?php if($defaultmonth_end==11) echo 'selected="selected"'; ?>>Νοεμβρίου</option>
+								<option value="12" <?php if($defaultmonth_end==12) echo 'selected="selected"'; ?>>Δεκεμβρίου</option>
 							</select>
 							
 							<select id="expirationdate_year" name="expirationdate_year" >
-								<option <?php if($defaultyear==2010) echo 'selected="selected"'; ?>>2010</option>
-								<option <?php if($defaultyear==2011) echo 'selected="selected"'; ?>>2011</option>
-								<option <?php if($defaultyear==2012) echo 'selected="selected"'; ?>>2012</option>
-								<option <?php if($defaultyear==2013) echo 'selected="selected"'; ?>>2013</option>
-								<option <?php if($defaultyear==2014) echo 'selected="selected"'; ?>>2014</option>
-								<option <?php if($defaultyear==2015) echo 'selected="selected"'; ?>>2015</option>
-								<option <?php if($defaultyear==2016) echo 'selected="selected"'; ?>>2016</option>
-								<option <?php if($defaultyear==2017) echo 'selected="selected"'; ?>>2017</option>
+								<option <?php if($defaultyear_end==2010) echo 'selected="selected"'; ?>>2010</option>
+								<option <?php if($defaultyear_end==2011) echo 'selected="selected"'; ?>>2011</option>
+								<option <?php if($defaultyear_end==2012) echo 'selected="selected"'; ?>>2012</option>
+								<option <?php if($defaultyear_end==2013) echo 'selected="selected"'; ?>>2013</option>
+								<option <?php if($defaultyear_end==2014) echo 'selected="selected"'; ?>>2014</option>
+								<option <?php if($defaultyear_end==2015) echo 'selected="selected"'; ?>>2015</option>
+								<option <?php if($defaultyear_end==2016) echo 'selected="selected"'; ?>>2016</option>
+								<option <?php if($defaultyear_end==2017) echo 'selected="selected"'; ?>>2017</option>
 							</select>
-							@ (24Η)<input type="text" size="2" value="<?php echo $defaulthour; ?>" name="expirationdate_hour" id="expirationdate_hour" >
-							:<input type="text" size="2" value="<?php echo $defaultminute; ?>" name="expirationdate_minute" id="expirationdate_minute" >
+							@ (24Η)<input type="text" size="2" value="<?php echo $defaulthour_end; ?>" name="expirationdate_hour" id="expirationdate_hour" >
+							:<input type="text" size="2" value="<?php echo $defaultminute_end; ?>" name="expirationdate_minute" id="expirationdate_minute" >
 						</td>
 					</tr>				
 				</tbody>
@@ -203,7 +213,7 @@
 				?>
 				</td>
 				<td class="posts column-posts num">
-					<a href="<?php echo URL; ?>/edit-tags.php?action=edit&taxonomy=category&tag_ID=<?php echo $consultation->term_id; ?>">Επεξεργασία</a>
+					<a href="<?php echo URL; ?>/wp-admin/admin.php?page=edit-consultation-handle&cons=<?php echo $consultation->term_id; ?>">Επεξεργασία</a>
 				</td>
 				<td class="posts column-posts num2">
 					<?php if(!is_open($consultation->term_id)) {
@@ -288,24 +298,41 @@ global $wpdb;
 	$wpdb->query($sql);
 	return true;
 }
-/*
-function is_open($cons_id){
+
+function update_consultation(){
 	global $wpdb;
-    $poststable = $wpdb->posts;
-	$tp = $wpdb->prefix;
+
+	$dateExpSet = ''.$_POST['expirationdate_year'].'-'.$_POST['expirationdate_month'].'-'.$_POST['expirationdate_day'].' ';
+	$dateExpSet .= ''.$_POST['expirationdate_hour'].':'.$_POST['expirationdate_minute'];
+	$dateStrSet = ''.$_POST['startdate_year'].'-'.$_POST['startdate_month'].'-'.$_POST['startdate_day'].' ';
+	$dateStrSet .= ''.$_POST['startdate_hour'].':'.$_POST['startdate_minute'];
+	$dateNow =  ''.date('Y').'-'.date('m').'-'.date('d').' '.date('H').':'.date('i') ;			
 	
-	$sql= "SELECT COUNT(*) FROM $poststable  
-			INNER JOIN {$tp}term_relationships as r1 
-				ON ($poststable.ID = r1.object_id) 
-			INNER JOIN {$tp}term_taxonomy as t1 
-				ON (r1.term_taxonomy_id = t1.term_taxonomy_id) 
-			WHERE  post_password = '' 
-				AND comment_status = 'open' 
-				AND t1.taxonomy = 'category' 
-				AND t1.term_id = ".$cons_id."";
+	if(strtotime($dateExpSet) < strtotime($dateNow)){ 
+		$month = date('m');
+		$day = '01';
+		if ($month ==12 ) { $month = '01'; 
+			$year = date('Y') + 1; 
+			$dateDef =  ''.$year.'-'.$month.'-'.$day.' '.date('H').':'.date('i') ;	
+		} else {
+			$dateDef =  ''.date('Y').'-'.$month.'-'.$day.' '.date('H').':'.date('i') ;	
+		}
+		$dateExpSet = $dateDef; 
+	} 
 	
-	$open_posts = $wpdb->get_var($sql);
-	if ($open_posts > 0){ return true;	}
-	return false;
-} */
+	if(strtotime($dateStrSet) < strtotime($dateNow)){ 
+		$month = date('m');
+		$day = '01';
+		if ($month ==12 ) { $month = '01'; 
+			$year = date('Y') + 1; 
+			$dateDef =  ''.$year.'-'.$month.'-'.$day.' '.date('H').':'.date('i') ;	
+		} else {
+			$dateDef =  ''.date('Y').'-'.$month.'-'.$day.' '.date('H').':'.date('i') ;	
+		}
+		$dateStrSet = $dateDef ;
+	} 
+	
+	wp_update_term($_GET['cons'], 'category', array('description' => ''.$dateStrSet.'@'.$dateExpSet.''));
+
+}
 ?>

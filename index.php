@@ -15,6 +15,7 @@
 			<li class="open<?php if($_GET[type]=='open') echo ' selected"'; ?>"><a href="<?php echo URL; ?>/?type=open">Ανοικτές σε Σχολιασμό</a></li>
 			<li class="closed<?php if($_GET[type]=='closed') echo ' selected"'; ?>"><a href="<?php echo URL; ?>/?type=closed">Πρός Επεξεργασία</a></li>
 			<li class="done<?php if($_GET[type]=='done') echo ' selected"'; ?>"><a href="<?php echo URL; ?>/?type=done">Ολοκληρωμένες</a></li>
+			<li class="text"><a href="http://opengov.pdm.gov.gr/consultations/">Κανονισμός Διαβούλευσης</a></li>
 		</ul>
 		<div class="index_list">
 			<?php get_consultations_list_index();	?>

@@ -1,59 +1,95 @@
 <?php  redirector(); ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head profile="http://gmpg.org/xfn/11">
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
-
-	<title><?php headtitles(); ?></title>
-	
+<?php $options = get_option('consultation_options'); ?>
+<!--[if lt IE 7]>   <html class="no-js lt-ie9 lt-ie8 lt-ie7" <?php language_attributes(); ?>> <![endif]-->
+<!--[if IE 7]>		<html class="no-js lt-ie9 lt-ie8" <?php language_attributes(); ?>> <![endif]-->
+<!--[if IE 8]>		<html class="no-js lt-ie9 ie8" <?php language_attributes(); ?>> <![endif]-->
+<!--[if IE 9]>		<html class="ie9" <?php language_attributes(); ?>> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html <?php language_attributes(); ?>><!--<![endif]-->
+<head>
+	<meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php bloginfo('charset'); ?>" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="icon" href="<?php echo IMG; ?>/favicon.ico" />
 	<link rel="shortcut icon" href="<?php echo IMG; ?>/favicon.ico" />
-
-	<link rel="stylesheet" href="<?php echo ROOT; ?>/style.css" type="text/css" media="screen" />
 	
-	<script type="text/javascript" src="<?php echo JS; ?>/jquery.js" /></script>
-	<script type="text/javascript" src="<?php echo JS; ?>/jquery.cookie.js" /></script>
-	<script type="text/javascript" src="<?php echo JS; ?>/jquery.textresizer.js" /></script>
-
-	<script type="text/javascript">
-	$(document).ready(function(){
+	<script src="<?php echo JS; ?>/modernizr.js"></script>
 	
-		$("ul.textresizer a").textresizer({
-			target: "#wrapper" 
-		});
-	});
-	</script>
+	<title><?php headtitles(); ?></title>
 	
 	<?php wp_head(); ?>
 </head>
 
-<body>
-<div id="wrapper">
+<body <?php body_class(); ?>>
 
-	<div id="header">
-		<div id="headerlogo">
-			<img class="logo" src="<?php echo IMG; ?>/logo.jpg">
-			<h1><a href="<?php echo URL; ?>/" title="Αρχική"><?php echo NAME; ?></a></h1>
-			<h2><?php echo DESCRIPTION; ?></h2>
-		</div>	
-	</div>
-	<div id="main_nav">
-		<ul>
-			<li><a href="<?php echo URL; ?>/">Αρχική</a></li>
-			<li><a href="http://www.primeminister.gov.gr" target="_blank">Πρωθυπουργός της Ελλάδας</a></li>
-			<li><a href="http://www.opengov.gr/home" target="_blank">Ανοικτή Διακυβέρνηση</a></li>
-			<li><?php echo get_ministry_link(); ?></li>
-			<li><a href="<?php echo OPENGOV; ?>/?cat=42" target="_blank">Διαβουλεύσεις Υπουργείων</a></li>
-		</ul>
-		<div class="texter">
-			<ul class="textresizer">
-			   <li><a href="#nogo"><img src="<?php echo IMG; ?>/min.gif" title="Μικρά"/></a></li>
-			   <li><a href="#nogo"><img src="<?php echo IMG; ?>/mid.gif" title="Μεσαία"/></a></li>
-			   <li><a href="#nogo"><img src="<?php echo IMG; ?>/lrg.gif" title="Μεγάλα"/></a></li>
-			</ul>
+<!--[if lt IE 8]>
+<p class="browsehappy">
+	<?php _e('You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to be able to experience this site.', 'opengov'); ?>
+</p><![endif]-->
+<no-script>
+ <p id="no-js-warning">
+	<?php _e(' It seems you have <strong>disabled</strong> javascript. Please <strong><a href="http://www.enable-javascript.com/">enable javascript</a></strong> for this site to function properly.', 'opengov'); ?>
+  </p>
+</no-script>
+
+	<header>
+		<div class="container">
+			<nav class="navbar og-top-menu" role="navigation">
+			 <form class="navbar-form pull-right" method="get" action="http://opengov.pdm.gov.gr/" role="search">
+				<div class="form-group">
+				  <input type="text" name="s" class="form-control og-search" style=" border-radius: 0px !important;" placeholder="Αναζήτηση.." value="<?php echo get_search_query(); ?>" />
+				</div>
+			</form>
+			
+			<?php
+				wp_nav_menu( array(
+					'menu'       		=> 'top-menu',
+					'theme_location' 	=> 'top-menu',
+					'container'  		=> false,
+					'menu_class'        => 'nav navbar-nav pull-right',
+					'fallback_cb'       => 'wp_bootstrap_navwalker::fallback',
+					'walker'            => new wp_bootstrap_navwalker()
+					)
+				);
+			?>
+			</nav>
 		</div>
-	</div>
+		
+		<div class="container">
+			<div class="row">
+				<div class="col-md-4 logo">
+					<a href="<?php echo URL; ?>" title="<?php echo NAME; ?>">	
+						<?php if($options['logo'] != '') { ?>
+							<img src="<?php echo $options['logo']; ?>" alt="<?php echo NAME; ?>" title="<?php echo NAME; ?>" class="pull-left" />
+						<?php } ?>
+						<?php echo NAME; ?><br />
+						<span><?php echo DESCRIPTION; ?></span>
+					</a>
+				</div>
+				<div class="col-md-8 text-right">
+					<nav class="navbar og-main-menu" role="navigation">
+						<?php
+							// TODO: Make it collapsable
+							wp_nav_menu( array(
+								'menu'       		=> 'main-menu',
+								'theme_location' 	=> 'primary',
+								'container'  		=> false,
+								'menu_class'        => 'nav navbar-nav pull-right',
+								'fallback_cb'       => 'wp_bootstrap_navwalker::fallback',
+								'walker'            => new wp_bootstrap_navwalker()
+								)
+							);
+						?>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</header>
+	
+	<section>
+
 	<?php global $cnt; echo $cnt;?>
-	<div id="content">	
+	<div id="content">
+		<div class="container">
+		 <div class="col-md-12">
 		<?php if((!is_home()) || (!empty($_GET[c])) ){ my_breadcrumb(); } ?>

@@ -32,24 +32,6 @@ function the_category_filter($thelist,$separator=' ') {
       }  
   } 
 
-/* Return A Post Image If Exists or VideoThumbnail************************/
-function get_the_post_image($width=120) {
-
-	global $post, $posts;
-	$first_img = '';
-	ob_start();
-	ob_end_clean();
-	$output = preg_match_all('/<img.+src=[\'"]([^\'"]+)[\'"].*>/i', $post->post_content, $matches);
-	$first_img = $matches [1] [0];
-
-	if(!(empty($first_img))){ 
-		$img = "<img src=\"$first_img\" width=\"$width\"/>";
-		echo $img;
-	}else{
-		get_video_thumbnail($width) ;
-	}
-}
-
 /* Return Links to a Given RSS Feed ************************/
 function getRSSFeed($url, $numitems = '5', $before='<li>', $after='</li>')
 {
@@ -64,79 +46,6 @@ function getRSSFeed($url, $numitems = '5', $before='<li>', $after='</li>')
 	}
 	else
 		echo "<!--An error occured! No url was specified.-->";
-}
-
-/* Masks eMails in Content with Hex ************************/
-function mask_email($text) {
-
-	$lines=split("\n",stripslashes($text));
-	foreach($lines as $theline){
-		if(preg_match_all("/(mailto:[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+\.[a-zA-Z.]{2,5})/", $theline, $matches)){
-			foreach($matches[1] as $key => $address)	{
-				$at = '<img src="'.IMG.'/at_symbol.gif" class="masker"/>';
-				$encoded_address = "mailto:".email_encode(substr($address,7));
-				$theline = str_replace($address, $encoded_address, $theline);	
-				$theline = str_replace("@", $at, $theline);
-			}
-		}	
-		$finaltext .= $theline;
-	}
-	return $finaltext;
-}
-
-function email_encode($email_address) {
-	$encoded = bin2hex("$email_address");
-	$encoded = chunk_split($encoded, 2, '%');
-	$encoded = '%' . substr($encoded, 0, strlen($encoded) - 1);
-	return $encoded;
-}
-
-/* Return the YouTube Embeded Video ************************/
-function get_video($text) {
-	
-	$lines=split("\n",stripslashes($text));
-	$key = "/\[youtube ([a-zA-Z0-9\-\_]{11})([^\s<]*)\]/";
-	foreach($lines as $theline){
-
-		if(preg_match_all($key, $theline, $matches)){
-			foreach($matches[1] as $key => $video)	{
-				$video_embed = '';
-				$video_embed .= "<center><object width=\"560\" height=\"340\">";
-				$video_embed .= "<param name=\"movie\" value=\"http://www.youtube.com/v/".$video."\">";
-				$video_embed .="</param><param name=\"allowFullScreen\" value=\"true\"></param><param name=\"allowscriptaccess\" value=\"always\">";
-				$video_embed .="</param><embed src=\"http://www.youtube.com/v/".$video."\" type=\"application/x-shockwave-flash\" ";
-				$video_embed .="allowscriptaccess=\"always\" allowfullscreen=\"true\" width=\"560\" height=\"340\"></embed></object></center>";
-				$theline = str_replace("[youtube ".$video."]", $video_embed, $theline);	
-			}
-		}
-		$finaltext .= $theline;
-	}
-	return $finaltext;
-}
-
-/* Return YouTube Embeded Video Thumbnail ************************/
-function get_video_thumbnail($width=150, $alt=false) {
-
-	global $post, $posts;
-	$first_vid = '';
-	ob_start();
-	ob_end_clean();
-	$key = "/\[youtube ([a-zA-Z0-9\-\_]{11})([^\s<]*)\]/";
-	$output = preg_match_all($key, $post->post_content, $matches);
-	$first_vid = $matches [1] [0];
-
-	if(!(empty($first_vid))){ 
-		if ($width<121) {
-			$video_thumb .= "<img src=\"http://img.youtube.com/vi/".$first_vid."/2.jpg\"";
-		} else {
-			$video_thumb .= "<img src=\"http://img.youtube.com/vi/".$first_vid."/0.jpg\"";
-		}
-		if (alt){
-			$video_thumb .="alt=\"".$post->post_title."\"";
-		}
-		$video_thumb .="width=\"$width\"/>";
-		echo $video_thumb;
-	}
 }
 
 //@link http://codex.wordpress.org/Function_Reference/in_category#Testing_if_a_post_is_in_a_descendant_category
@@ -177,27 +86,14 @@ function is_really_home(){
 	return false;
 }
 
-function get_ministry_link(){
-	$current_url=$_SERVER['REQUEST_URI'];
-	$min_link = explode('/',$current_url);
-	if($min_link[1]=='ypes')	{ return '<a href="http://www.ypes.gr" target="_blank">Δικτυακός Τόπος Υπουργείου</a>'; }
-	if($min_link[1]=='minenv')	{ return '<a href="http://www.ypeka.gr" target="_blank">Δικτυακός Τόπος Υπουργείου</a>'; }
-	if($min_link[1]=='minfin')	{ return '<a href="http://www.minfin.gr" target="_blank">Δικτυακός Τόπος Υπουργείου</a>'; }
-	if($min_link[1]=='ministryofjustice'){ return '<a href="http://www.ministryofjustice.gr" target="_blank">Δικτυακός Τόπος Υπουργείου</a>'; }
-	if($min_link[1]=='minlab')	{ return '<a href="http://www.ypakp.gr" target="_blank">Δικτυακός Τόπος Υπουργείου</a>'; }
-	if($min_link[1]=='yme')		{ return '<a href="http://www.yme.gr" target="_blank">Δικτυακός Τόπος Υπουργείου</a>'; }
-	if($min_link[1]=='ypaat')	{ return '<a href="http://www.minagric.gr" target="_blank">Δικτυακός Τόπος Υπουργείου</a>'; }
-	if($min_link[1]=='ypepth')	{ return '<a href="http://www.ypepth.gr" target="_blank">Δικτυακός Τόπος Υπουργείου</a>'; }
-	if($min_link[1]=='ypoian')	{ return '<a href="http://www.ypoian.gr" target="_blank">Δικτυακός Τόπος Υπουργείου</a>'; }
-	if($min_link[1]=='yptp')	{ return '<a href="http://www.yptp.gr" target="_blank">Δικτυακός Τόπος Υπουργείου</a>'; }
-	if($min_link[1]=='yppol')	{ return '<a href="http://www.culture.gr" target="_blank">Δικτυακός Τόπος Υπουργείου</a>'; }
-	if($min_link[1]=='yyka')	{ return '<a href="http://www.yyka.gov.gr" target="_blank">Δικτυακός Τόπος Υπουργείου</a>'; }
-	if($min_link[1]=='ggk')		{ return '<a href="http://www.ggk.gov.gr" target="_blank">Δικτυακός Τόπος Γ. Γραμματείας Κυβέρνησης</a>'; }
-	if($min_link[1]=='ypep')	{ return '<a href="http://www.ypep.gr" target="_blank">Δικτυακός Τόπος Υπουργού Επικρατείας</a>'; }
-	if($min_link[1]=='mindef')	{ return '<a href="http://www.mod.gr" target="_blank">Δικτυακός Τόπος Υπουργείου</a>'; }
-	if($min_link[1]=='ythynal')	{ return '<a href="http://www.yen.gr" target="_blank">Δικτυακός Τόπος Υπουργείου</a>'; }	
-	return $URL;
+/* Setup Menu ************************/
+function menu_setup() {
+	register_nav_menu('top-menu', __( 'Top Menu', 'opengov'));
+	register_nav_menu('main-menu', __( 'Main Menu', 'opengov'));
+	function fallbackfmenu(){ echo 'Ορίστε Πρώτα Μενού'; }	
 }
+
+add_action( 'after_setup_theme', 'menu_setup' );
 
 /* Checks If a Url Exists ************************/
  function url_exists($url){
@@ -207,7 +103,7 @@ function get_ministry_link(){
 
 function my_breadcrumb() {
         
-		echo '<div class="breadcrumb"><a class="home" href="';
+		echo '<div class="mybreadcrumb"><a class="home" href="';
 		echo URL;
 		echo '">';
 		echo 'Αρχική';
@@ -498,18 +394,6 @@ function get_consultations_list_index(){
 			echo '<span class="rss_gray">';
 			echo '<a href="'.URL.'/?feed=comments-rss2&cat='.$cat.'">Παρακολούθηση μέσω RSS</a>';
 			echo '</span>';	
-			/*
-			echo '<span class="export">';
-			echo 'Εξαγωγή Σχολίων σε ';
-			echo '<a href="'.URL.'/?ec='.$cat.'&t=xls"><img src="'.IMG.'/excel.gif" /></a>';
-			echo ' ή '; 
-			echo '<a href="'.URL.'/?ec='.$cat.'&t=xml"><img src="'.IMG.'/xml.gif" /></a>';
-			echo '</span>';
-			
-			echo '<span class="trackback">';
-			echo '<a href="'.URL.'/wp-trackback.php?p='.$the_post->ID.'">Επισήμανση (trackback)</a>';
-			echo '</span>';
-			*/
 			if ($the_post->comment_status =='open'){
 				echo '<span class="participate red_spot">';
 				echo '<a href="'.URL.'/?p='.$the_post->ID.'#consnav">Συμμετοχή στη Διαβούλευση!</a>';
@@ -582,24 +466,7 @@ function get_consultations_list_index(){
 			echo '<span class="export">';
 			echo 'Εξαγωγή Σχολίων σε ';
 			echo '<a href="'.URL.'/?ec='.$cat.'&t=xls"><img src="'.IMG.'/excel.gif" /></a>';
-			//echo ' ή '; 
-			//echo '<a href="'.URL.'/?ec='.$cat.'&t=xml"><img src="'.IMG.'/xml.gif" /></a>';
 			echo '</span>';
-			//echo '<span class="rss_gray">';
-			//echo '<a href="'.URL.'/?feed=comments-rss2&cat='.$cat.'">Παρακολούθηση μέσω RSS</a>';
-			//echo '</span>';	
-			/*
-			echo '<span class="export">';
-			echo 'Εξαγωγή Σχολίων σε ';
-			echo '<a href="'.URL.'/?ec='.$cat.'&t=xml"><img src="'.IMG.'/xml.gif" /></a>';
-			echo ' ή '; 
-			echo '<a href="'.URL.'/?ec='.$cat.'&t=csv"><img src="'.IMG.'/csv.gif" /></a>';
-			echo '</span>';
-			
-			echo '<span class="trackback">';
-			echo '<a href="'.URL.'/wp-trackback.php?p='.$the_post->ID.'">Επισήμανση (trackback)</a>';
-			echo '</span>';
-			*/
 			echo '</div>';
 			echo '</div>'; //index_list_item
 		}
@@ -667,24 +534,7 @@ function get_consultations_list_index(){
 						echo '<span class="export">';
 			echo 'Εξαγωγή Σχολίων σε ';
 			echo '<a href="'.URL.'/?ec='.$cat.'&t=xls"><img src="'.IMG.'/excel.gif" /></a>';
-			//echo ' ή '; 
-			//echo '<a href="'.URL.'/?ec='.$cat.'&t=xml"><img src="'.IMG.'/xml.gif" /></a>';
 			echo '</span>';
-			//echo '<span class="rss_gray">';
-			//echo '<a href="'.URL.'/?feed=comments-rss2&cat='.$cat.'">Παρακολούθηση μέσω RSS</a>';
-			//echo '</span>';	
-			/*
-			echo '<span class="export">';
-			echo 'Εξαγωγή Σχολίων σε ';
-			echo '<a href="'.URL.'/?ec='.$cat.'&t=xml"><img src="'.IMG.'/xml.gif" /></a>';
-			echo ' ή '; 
-			echo '<a href="'.URL.'/?ec='.$cat.'&t=csv"><img src="'.IMG.'/csv.gif" /></a>';
-			echo '</span>';
-			
-			echo '<span class="trackback">';
-			echo '<a href="'.URL.'/wp-trackback.php?p='.$the_post->ID.'">Επισήμανση (trackback)</a>';
-			echo '</span>';
-			*/
 			echo '<span class="participate blue_spot">';
 			echo '<a href="'.URL.'/?p='.$the_post->ID.'">Δείτε τα Αποτελέσματα!</a>';
 			echo '</span>';
@@ -743,7 +593,7 @@ function get_cons_posts_list($p_id,$nav_title){
 
 function redirector(){
 	// Redirect 404 Errors
-	if (is_404() || is_search() || is_archive() || is_page()){
+	if (is_404() || is_search() || is_archive()){
 		header("Location: ".URL."");
 	}
 	$options = get_option('consultation_options');	
@@ -776,38 +626,6 @@ function redirector(){
 	if (!empty($_GET['ec'])){
 		include(TEMPLATEPATH."/export_data.php");
 	}
-	redirect_old_links();
-}
-
-function redirect_old_links(){
-	// TO DO (no!)
- 	if (!empty($_GET[option])){
-		header("Location: ".URL."");
-		//include(TEMPLATEPATH . '/app/redir.php');
-	}
-}
-
-function display_votes($id){
-	global $wpdb;
-	
-	$sql_plus = "SELECT ck_rating_up FROM {$wpdb->prefix}comment_rating WHERE ck_comment_id = '".$id."'";
-	$sql_minus = "SELECT ck_rating_down FROM {$wpdb->prefix}comment_rating WHERE ck_comment_id = '".$id."'";
-	
-	$plus = $wpdb->get_var($sql_plus);
-	$minus = $wpdb->get_var($sql_minus);
-	
-	$img_plus = URL.'/wp-content/plugins/comment-rating/images/2_14_gray_up.png';
-	$img_minus = URL.'/wp-content/plugins/comment-rating/images/2_14_gray_down.png';
-	
-	$votes = 'Το βλέπω Θετικά/Αρνητικά: '; 
-	$votes .= '<img title="Θετική Ψήφος" src="'.$img_plus.'" id="up-'.$id.'" style="padding: 0px; border: medium none; "> ';
-	$votes .= '<span style="font-size: 12px; color: rgb(0, 153, 51);" id="karma-'.$id.'-up">'.$plus.'</span>';
-	$votes .= '&nbsp;';
-	$votes .= '<img title="Αρνητική Ψήφος" src="'.$img_minus.'" id="down-'.$id.'" style="padding: 0px; border: medium none;"> ';
-	$votes .= '<span style="font-size: 12px; color: rgb(153, 0, 51);" id="karma-'.$id.'-down">'.$minus.'</span>';
-	
-	return $votes;
-
 }
 
 function is_open($cons_id){

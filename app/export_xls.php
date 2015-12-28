@@ -23,12 +23,12 @@
 		$objPHPExcel = new PHPExcel();
 
 		// Set properties
-		$objPHPExcel->getProperties()->setCreator("OpenGov.gr")
-									 ->setLastModifiedBy("OpenGov Admin")
-									 ->setTitle("Αρχείο Εξαγωγής Σχολίων")
-									 ->setSubject("Αρχείο Εξαγωγής Σχολίων")
-									 ->setDescription("Αρχείο Εξαγωγής Σχολίων - OpenGov.gr")
-									 ->setKeywords("opengov, σχόλια")
+		$objPHPExcel->getProperties()->setCreator("Consultator")
+									 ->setLastModifiedBy("Consultator")
+									 ->setTitle("Consultator")
+									 ->setSubject("Consultator")
+									 ->setDescription("Αρχείο Εξαγωγής Σχολίων")
+									 ->setKeywords("Σχόλια")
 									 ->setCategory("Αρχείο Σχολίων");
 
 
@@ -38,32 +38,9 @@
 					->setCellValue('B1', 'Κωδικός Σχολίου')
 					->setCellValue('C1', 'Σχολιαστής')
 					->setCellValue('D1', 'Ημερομηνία Υποβολής')
-					->setCellValue('E1', 'Σχόλιο');
-
+					->setCellValue('Ε1', 'Σχόλιο');
 		
-		$row = 2;
-		/*
-		foreach ($qr as $qrow) 
-		{
-			// Add some data // Datas
-			$objPHPExcel->setActiveSheetIndex(0)
-					->setCellValue('A'.$row, $qrow->post_title )
-					->setCellValue('B'.$row, $qrow->comment_ID)
-					->setCellValue('C'.$row, $qrow->comment_author )
-					->setCellValue('D'.$row, $qrow->comment_date_gmt)
-					->setCellValue('E'.$row, $qrow->ck_rating_up)
-					->setCellValue('F'.$row, $qrow->ck_rating_down )
-					->setCellValue('G'.$row, $qrow->comment_content);
-			$row++;
-		} */
-		$objPHPExcel->getActiveSheet()->fromArray($qr,NULL,'A2');
-		/*
-		Debug
-		$objPHPExcel->setActiveSheetIndex(0)
-					->setCellValue('A'.$row, count($qr) )
-					->setCellValue('B'.$row, $sql );
-		*/
-		
+		$objPHPExcel->getActiveSheet()->fromArray($qr,NULL,'A2');		
 
 		// Rename sheet
 		$objPHPExcel->getActiveSheet()->setTitle('Σχόλια Διαβούλευσης');

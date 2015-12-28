@@ -20,7 +20,6 @@
 					</div>
 					<div class="meta-comment">
 						<a href="<?php echo URL; ?>/?c=<?php echo $c; ?>" class="permalink">Μόνιμος Σύνδεσμος</a>
-						<div class="rate"><?php echo display_votes($c);  ?></div>
 					</div>
 				</div>
 				<p><?php  echo  $the_comment->comment_content; ?></p>

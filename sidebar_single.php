@@ -1,15 +1,12 @@
+<div class="col-md-4">
 <div id="sidebar">
 
 	<?php 
 		$category = get_the_category();
 		$options = get_option('consultation_options');	
 		$cons_cat;
-		//$is_open = false;
-		//$is_close = false; 
 		foreach ($category as $cat) {
-			//if ($cat->cat_ID ==$options['cat_close']) { $is_close = true; }
-			//else if ($cat->cat_ID ==$options['cat_open']) { $is_open = true; }
-			//else { $cons_cat = $cat; } 
+			if($cat->cat_ID == $options['cat_open'] or $cat->cat_ID ==$options['cat_close'] or $cat->cat_ID ==$options['cat_results']) continue;
 			$cons_cat = $cat;  
 		}			
 	?>
@@ -18,19 +15,15 @@
 		
 		<?php 
 			$expires = explode('@', $cons_cat -> category_description );
-			//echo mysql2date("j F Y", $expires[1]);
-			//echo mysql2date("j F Y, H:i", $expires[1]);
 			$countdate =  '"'.mysql2date("m/d/Y H:i", $expires[1]).'"'; 
-			//$countdate = str_replace("ΠΜ", "AM",$countdate);
-			//$countdate = str_replace("ΜΜ", "PM",$countdate);
-
 		?>
-		<h4>
+		<div class="counter">
 			Αναρτήθηκε<br />
 			<span><?php echo mysql2date("j F Y, H:i", $expires[0]); ?></span><br />
 			Ανοικτή σε Σχόλια έως<br />
 			<span><?php echo mysql2date("j F Y, H:i", $expires[1]); ?></span>
-		</h4>
+		</div>
+		
 		<script language="JavaScript">
 			TargetDate = <?php echo $countdate; ?>;
 			BackColor = "#FFFFCC";
@@ -52,6 +45,7 @@
 	<?php } } ?>
 	
 	<?php
+	if ( function_exists( 'get_downloads' ) ){
 		$dl = get_downloads('category='.$cons_cat->cat_ID.'');
 		if (!empty($dl)) { ?>
 		<div class="sidespot orange_spot">
@@ -61,7 +55,7 @@
 					echo '<span class="file"><a href="'.$d->url.'" title="(Έκδοση '.$d->version.') Μεταφορτώθηκε '.$d->hits.' φορές" >'.$d->title.'</a></span>';
 			 } ?>
 		</div>
-	<?php } ?>
+	<?php } } ?>
 
 	<div class="sidespot">
 		<?php if (comments_open()) { ?>
@@ -81,19 +75,13 @@
 		<span class="seperator"></span>
 		<?php } ?>
 		<h4>Εργαλεία</h4>
-		<?php /*
-		<span class="trackback">
-			<a href="<?php echo URL; ?>/wp-trackback.php?p=<?php echo $post->ID; ?>">Επισήμανση (trackback)</a>
-		</span> */
-		?>
 		<span class="print">
 			<a href="<?php echo URL; ?>/?p=<?php echo $post->ID; ?>&print=1">Εκτύπωση</a>
 		</span>
 		<?php if(!is_open($cons_cat->cat_ID)){ ?>
 		<span class="export">
 			Εξαγωγή Σχολίων σε 
-			<a href="<?php echo URL; ?>/?ec=<?php echo $cons_cat->cat_ID; ?>&t=xls"><img src="<?php echo IMG; ?>/excel.gif" /></a><?php /* ή 
-			<a href="<?php echo URL; ?>/?ec=<?php echo $cons_cat->cat_ID; ?>&t=xml"><img src="<?php echo IMG; ?>/xml.gif" /></a>  */ ?>
+			<a href="<?php echo URL; ?>/?ec=<?php echo $cons_cat->cat_ID; ?>&t=xls"><img src="<?php echo IMG; ?>/excel.gif" /></a>
 		</span>
 		<?php } ?>
 		<span class="seperator"></span>
@@ -149,24 +137,25 @@
 				<script src="http://static.ak.fbcdn.net/connect.php/js/FB.Share" type="text/javascript"></script>
 			</li>
 			<li>	
-				<!-- Google Buzz -->
-				<a title="Ανάρτηση στο Google Buzz" class="google-buzz-button" href="http://www.google.com/buzz/post" data-button-style="normal-count" data-locale="el"></a>
-				<script type="text/javascript" src="http://www.google.com/buzz/api/button.js"></script>
+				<!-- Google Plus -->
+				<div class="g-plusone" data-size="tall"></div>
+				<script type="text/javascript">
+				  (function() {
+					var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+					po.src = 'https://apis.google.com/js/plusone.js';
+					var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+				  })();
+				</script>
 			</li>
-			<?php /*
-			<li>	
-				<!-- Digg -->
-				<script src="http://widgets.digg.com/buttons.js" type="text/javascript"></script><a class="DiggThisButton DiggMedium"></a>
-			</li> */
-			?>
 		</ul>
 
 		<span class="seperator"></span>
 	
 		<h4>Όλες οι Διαβουλεύσεις</h4>
-		<ul>
+		<ul class="allthecons">
 			<?php get_consultations_list();	?>
 		</ul>
 	</div>
 
+</div>
 </div>

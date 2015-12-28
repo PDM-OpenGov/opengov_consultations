@@ -3,7 +3,8 @@
 	$options = get_option('consultation_options');
 ?>
 	<div id="main_content">
-		<div class="post clearfix">
+		<div class="col-md-8">
+		<div class="post">
 			<?php
 			if (in_category($options['cat_open'])){
 			// Είναι εισαγωγικό: 
@@ -131,6 +132,7 @@
 			<?php get_cons_posts_list($post->ID,'Πλοήγηση στη Διαβούλευση'); ?>
 			</div>
 		</div>	
+		</div>
 		<?php get_sidebar(); ?>
 		
 	</div>	

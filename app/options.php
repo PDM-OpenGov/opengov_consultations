@@ -8,9 +8,8 @@
 			$options['cat_results'] = 0;
 			$options['footer_content'] = '';
 			$options['analytics_content'] = '';
-			$options['rss_feed'] = '';
-			$options['rss_feed_num'] = '';
-			$options['rss_feed_title'] = '';
+			$options['logo'] = '';
+			$options['terms'] = '';
 			update_option('consultation_options', $options);
 		}
 		return $options;
@@ -23,12 +22,9 @@
 			$options['cat_close'] = $_POST['cat_close'] ;
 			$options['cat_open'] = $_POST['cat_open'] ;
 			$options['cat_results'] = $_POST['cat_results'] ;
+			$options['logo'] = $_POST['logo'] ;
+			$options['terms'] = $_POST['terms'] ;
 			
-			// RSS
-			$options['rss_feed'] = stripslashes($_POST['rss_feed']);
-			$options['rss_feed_num'] = stripslashes($_POST['rss_feed_num']);
-			$options['rss_feed_title'] = stripslashes($_POST['rss_feed_title']);
-
 			// footer
 			$options['footer_content'] = stripslashes($_POST['footer_content']);
 			
@@ -63,7 +59,7 @@
 						
 						<select name="cat_open"  style="width:250px;">
 							<?php foreach ($catz as $cat){
-								if(strlen($cat->name)<30) {
+								if(strlen($cat->name)<50) {
 									if ($cat->term_id == $options['cat_open']) {
 										  echo '<option value="'.$cat->term_id.'" selected="selected">'.$cat->name.'</option>';	  
 									} else {
@@ -75,7 +71,7 @@
 						 
 						<select name="cat_close"  style="width:250px;"> 
 							<?php foreach ($catz as $cat){
-								if(strlen($cat->name)<30) {
+								if(strlen($cat->name)<50) {
 									if ($cat->term_id == $options['cat_close']) {
 										  echo '<option value="'.$cat->term_id.'" selected="selected">'.$cat->name.'</option>';	  
 									} else {
@@ -88,7 +84,7 @@
 						<select name="cat_results"  style="width:250px;">
 							<option value="0" <?php if (get_option('cat_results') == 0) { echo 'selected="selected"'; }?>>--Καμία--</option>';	 	
 							<?php foreach ($catz as $cat){
-								if(strlen($cat->name)<30) {
+								if(strlen($cat->name)<50) {
 									if ($cat->term_id == $options['cat_results']) {
 										  echo '<option value="'.$cat->term_id.'" selected="selected">'.$cat->name.'</option>';	  
 									} else {
@@ -105,30 +101,45 @@
 		<table class="form-table">
 			<tbody>
 				<tr valign="top">
-					<th scope="row">Τροφοδοσία RSS</th>
+					<th scope="row">Κεφαλίδα<br/><small style="font-weight:normal;">Λoγότυπο (80 pixels πλάτος)</small></th>
 					<td>
-						<input type="text" name="rss_feed_title" id="rss_feed_title" class="code" size="40" value="<?php echo($options['rss_feed_title']); ?>">Τίτλος
-						<br />
-						<input type="text" name="rss_feed" id="rss_feed" class="code" size="40" value="<?php echo($options['rss_feed']); ?>">RSS URL 
-						<br />
-						<select name="rss_feed_num" size="1">
-							<option value="1" <?php if($options['rss_feed_num'] == 1) echo ' selected '; ?>>1</option>
-							<option value="2" <?php if($options['rss_feed_num'] == 2) echo ' selected '; ?>>2</option>
-							<option value="3" <?php if($options['rss_feed_num'] == 3) echo ' selected '; ?>>3</option>
-							<option value="4" <?php if($options['rss_feed_num'] == 4) echo ' selected '; ?>>4</option>
-							<option value="5" <?php if($options['rss_feed_num'] == 5) echo ' selected '; ?>>5</option>
-							<option value="6" <?php if($options['rss_feed_num'] == 6) echo ' selected '; ?>>6</option>
-						</select>Αριθμός Προβαλλόμενων Άρθρων 
-						<br />
+						<label>
+							<?php if($options['logo'] != '') echo '<img src="'.$options['logo'].'" width="80"/>&nbsp;&nbsp;'; ?>
+							<input type="text" name="logo" id="logo" class="code" size="40" value="<?php echo($options['logo']); ?>">&nbsp;
+							Ανεβάστε το λογότυπό σας στα <a href="<?php echo URL; ?>/wp-admin/media-new.php">Πολυμέσα</a> ή ορίστε URL.
+						</label>
 					</td>
 				</tr>
 			</tbody>
 		</table>
-
+		
 		<table class="form-table">
 			<tbody>
 				<tr valign="top">
-					<th scope="row">Footer<br/><small style="font-weight:normal;">HTML enabled</small></th>
+					<th scope="row">Όροι Χρήσης<br/><small style="font-weight:normal;">Εμφανίζεται στη φόρμα σχολιασμού.</small></th>
+					<td>
+						<select name="terms" size="1">
+						<option value="-1">---</option>
+						<?php 
+							$args = array( 'post_type' => 'page', 'posts_per_page' => -1, 'suppress_filters'=> false,);
+							$myposts = get_posts($args); 
+							foreach( $myposts as $post ) { 
+								setup_postdata($post); 
+								echo '<option value="'.$post->ID.'" ';
+								if($post->ID == $options['terms']) { echo 'selected'; }
+								echo '>'.$post->post_title.'</option>';
+							}
+						?>
+						</select>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<table class="form-table">
+			<tbody>
+				<tr valign="top">
+					<th scope="row">Υποσέλιδο<br/><small style="font-weight:normal;">HTML<br/> Στο κέντρο του υποσέλιδου.</small></th>
 					<td>
 						<label>
 							<textarea name="footer_content" cols="50" rows="10" id="footer_content" class="code" style="width:98%;font-size:12px;"><?php echo($options['footer_content']); ?></textarea>

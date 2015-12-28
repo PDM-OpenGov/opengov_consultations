@@ -1,22 +1,18 @@
-<?php get_header();?>
-
+<?php 
+	get_header();
+	$options = get_option('consultation_options');
+?>
+<div id="main_content">
+	<div class="post clearfix">
 	
-		<div id="main_content">
-			<?php while (have_posts()) : the_post(); ?>
-			<div class="Post clearfix">
-				<h3><?php the_title(); ?></h3>
-				
-				<?php if(!is_search() && !is_archive()) { ?>
-				<div class="PostContent">
-					<?php the_content('Read the rest of this entry &raquo;'); ?>
-				</div>
-				<?php } ?>
-			</div>	
-
-			<?php endwhile; ?>
+		<?php while ( have_posts() ) : the_post(); ?>
+		
+			<h3><?php the_title(); ?></h3>
+			<div class="post_content"><?php the_content(''); ?></div>
 			
-		</div>
-		<?php get_sidebar();?>
-	</div>
-	
+		<?php endwhile; // end of the loop. ?>
+		
+	</div>	
+	<?php get_sidebar(); ?>
+</div>	
 <?php get_footer(); ?>

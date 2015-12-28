@@ -1,5 +1,4 @@
 <?php
-
 	$current_url=$_SERVER['REQUEST_URI'];
 	$min_link = explode('/',$current_url);
 	

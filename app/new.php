@@ -4,13 +4,6 @@
 	$defaulthour = date('H');
 	$defaultyear = date('Y');
 	$defaultminute = date('i'); 
-	/*
-	if ($defaultmonth==12) {
-		$defaultmonth=01;
-	}else{
-		$defaultmonth++;
-	}
-	*/
 ?>
 <div class="wrap">
 	<div class="icon32" id="icon-edit-pages"><br></div>
@@ -67,10 +60,10 @@
 				if ($cons<4) { ?>
 					<br /><br />
 					<a href="<?php echo URL; ?>/wp-admin/edit.php?cat=<? echo $cns[1]; ?>">Προσθέστε Περιεχόμενο</a> &raquo;
-					<br /><br />
-					<a href="<?php echo URL; ?>/wp-admin/admin.php?page=dlm_addnew&cat=<? echo $cns[1];  ?>">Ανεβάστε Συνοδευτικά Αρχεία</a> &raquo;
-					<?php /* <br /><br />
-					<a href="<?php echo URL; ?>/wp-admin/admin.php?page=edit-consultation-handle&cons=<? echo $cns[1]; ?>">Επεξεργαστείτε τη Διαβούλευση</a> &raquo; */ ?>
+					<?php if ( function_exists( 'get_downloads' ) ){ ?>
+						<br /><br />
+						<a href="<?php echo URL; ?>/wp-admin/admin.php?page=dlm_addnew&cat=<? echo $cns[1];  ?>">Ανεβάστε Συνοδευτικά Αρχεία</a> &raquo;
+					<?php } ?>
 					<br /><br /></strong>
 					<a href="<?php echo URL; ?>/?preview=<? echo $cns[1]; ?>">Προεπισκόπηση της Διαβούλευσης</a> &raquo;</strong>
 			<?php } ?>
@@ -280,33 +273,6 @@ function build_consultation(){
 
 	$cons_id = wp_insert_category($new_cons);
 	
-	// Build Author 
-	/*
-	if (is_email($_POST['c_user'])) {
-		$email_exists = $wpdb->get_row("SELECT user_email FROM $wpdb->users WHERE user_email = '" . $_POST['c_user'] . "'");
-		if (!$email_exists) {
-			$username_arr = explode('@', $_POST['c_user']);	
-			$username = $username_arr[0];
-			if (validate_username($username )) {
-				if (!username_exists($username)) {
-					$password = substr(md5(uniqid(microtime())), 0, 7);
-					$user_id = wp_insert_user(array(
-								"user_login" => $username,
-								"user_pass" => $password,
-								"role" => 'editor',
-								"user_email" => $_POST['c_user']));
-					wp_new_user_notification($user_id, $password);
-				} else {
-					$userinfo = get_userdatabylogin($username);
-					$user_id = $userinfo->ID ;
-				}
-			}
-		}else{
-			$userinfo = $wpdb->get_row("SELECT ID FROM $wpdb->users WHERE user_email = '" . $_POST['c_user'] . "'");
-			$user_id = $userinfo->ID ;
-		}
-	} */
-	
 	$user_id = $_POST['c_user'];
 	
 	// Build Posts and AsignThem to the Category
@@ -337,18 +303,19 @@ function build_consultation(){
 		$new_post['post_date'] = $datePost ;
 		wp_insert_post( $new_post );
 	}
-	
-	// Build Download Category
-	global $wp_dlm_db_taxonomies;
-	$name = $_POST['c_title']; 
-	$parent = 0;
-	$id = $cons_id;
-	$query_ins = sprintf("INSERT INTO %s (id, name, parent, taxonomy) VALUES ('%s','%s','%s','category')",
-		$wpdb->escape( $wp_dlm_db_taxonomies ),
-		$wpdb->escape( $id ),
-		$wpdb->escape( $name ),
-		$wpdb->escape( $parent ));
-	$wpdb->query($query_ins);
+	if ( function_exists( 'get_downloads' ) ){ 
+		// Build Download Category
+		global $wp_dlm_db_taxonomies;
+		$name = $_POST['c_title']; 
+		$parent = 0;
+		$id = $cons_id;
+		$query_ins = sprintf("INSERT INTO %s (id, name, parent, taxonomy) VALUES ('%s','%s','%s','category')",
+			$wpdb->escape( $wp_dlm_db_taxonomies ),
+			$wpdb->escape( $id ),
+			$wpdb->escape( $name ),
+			$wpdb->escape( $parent ));
+		$wpdb->query($query_ins);
+	}
 	
 	$options = get_option('consultation_options');	
 	
@@ -370,24 +337,6 @@ function build_consultation(){
 	$new_post['post_date'] = $datePost ;
 	wp_insert_post( $new_post );
 	
-	/* Outro Text
-	if ($cnt==60 || $cnt==0) {
-		$hr = $hr+1;
-		$datePost = $dateNow.' 0'.$hr.':00:00';
-		if ($cnt==0) { $cnt = $cnt+10; } else { $cnt = 0; }; 
-	} else {
-		$datePost = $dateNow.' 0'.$hr.':'.$cnt.':00';
-		$cnt=$cnt+10;
-	}
-	$new_post['post_title'] = ''.$_POST['c_title'].' - Ολοκλήρωση';
-	$new_post['post_content'] = 'Κείμενο Ολοκλήρωσης - Να παραμείνει Πρόχειρο Μέχρι την Ολοκλήρωση της Διαβούλευσης!';
-	$new_post['post_status'] = 'draft';
-	$new_post['comment_status'] = 'closed'; 
-	if (!empty($user_id)) { $new_post['post_author'] = $user_id; }
-	$new_post['post_category'] = array($cons_id, $options['cat_close']);
-	$new_post['post_date'] = $datePost ;
-	wp_insert_post( $new_post );
-	*/
 	return $cons_id;
 }
 ?>
