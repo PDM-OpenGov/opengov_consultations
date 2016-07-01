@@ -1,4 +1,5 @@
 <?php
+ini_set('error_log', dirname(__FILE__) . '/consultations_errors.txt');
 
 // Names and stuff
 define('URL',get_bloginfo('url'));
@@ -19,21 +20,13 @@ remove_action('wp_head', 'parent_post_rel_link');
 remove_action('wp_head', 'feed_links_extra');
 remove_action('wp_head', 'adjacent_posts_rel_link_wp_head');
 remove_action('wp_head', 'start_post_rel_link');
-add_filter('the_generator', 'remove_generator');
 remove_action('wp_head', 'wp_generator');
 
+require_once(TEMPLATEPATH . '/app/exporter.php');
 require_once(TEMPLATEPATH . '/app/func.php');
 require_once(TEMPLATEPATH . '/app/paged-comments.php');
 require_once(TEMPLATEPATH . '/app/menu.php');
-require_once(TEMPLATEPATH . '/app/export_xls.php');
-
-function remove_generator() {
-	return '<generator>http://wordpress.org/</generator>';
-}
-// No Dashbar for logged in users (1of2)
-remove_action( 'personal_options', '_admin_bar_preferences' ); 
-// No Dashbar for logged in users (2of2)
-add_filter('show_admin_bar', '__return_false'); 
+require_once(TEMPLATEPATH . '/app/wp_bootstrap_navwalker.php');
 
 
 add_action( 'wp_enqueue_scripts', 'opengov_scripts' );
@@ -48,12 +41,12 @@ function opengov_scripts(){
 		
 		
 		wp_enqueue_script( 'bootstrap-js', JS . '/bootstrap.min.js', array( 'jquery' ) , '1.2.0' , true );
-		wp_enqueue_script( 'viewport-ie', JS . '/ie10-viewport-bug-workaround.js', array( 'jquery' ) , '1.2.0' , true );
-		
+		wp_enqueue_script( 'viewport-ie', JS . '/ie10-viewport-bug-workaround.js', array( 'jquery' ) , '1.2.0' , true );	
+		wp_enqueue_script( 'placeholder', JS . '/jquery.placeholder.min.js', array( 'jquery' ) , '1.2.0' , true );	
+
 	}
 }
 
-require_once('app/wp_bootstrap_navwalker.php');
-//require_once('lib/wp_bootstrap_comment.php');
+
 
 ?>

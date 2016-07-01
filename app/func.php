@@ -29,24 +29,8 @@ function the_category_filter($thelist,$separator=' ') {
           return implode($separator,$newlist);  
        } else {  
            return $thelist;  
-      }  
-  } 
-
-/* Return Links to a Given RSS Feed ************************/
-function getRSSFeed($url, $numitems = '5', $before='<li>', $after='</li>')
-{
-	if(!is_null($url)){	
-		require_once(ABSPATH. "wp-includes/rss-functions.php");
-		$rss = fetch_rss($url);
-		if($rss)
-			foreach(array_slice($rss->items,0,$numitems) as $item)
-				echo "$before<a title=\"".$item['description']."\" href=\"".$item['link']."\" target=\"_blank\">".$item['title']."</a>$after";
-		else
-			echo "<!--An error occured! There is a possibility that your feed may be badly formatted.<br />Error Message: " . magpie_error() ."-->";
-	}
-	else
-		echo "<!--An error occured! No url was specified.-->";
-}
+		}  
+} 
 
 //@link http://codex.wordpress.org/Function_Reference/in_category#Testing_if_a_post_is_in_a_descendant_category
 function post_is_in_descendant_category( $cats, $_post = null ){
@@ -150,20 +134,6 @@ function my_breadcrumb() {
 			echo mysql2date("j F Y, H:s", $the_comment->comment_date);
 			echo '</span>'; }
 		echo "</div>";
-}
-
-function show_wp_stats()
-{
-	global $user_ID; 
-	if( $user_ID ) {
-		if( current_user_can('level_10') ) {
-			echo '<div class="wp_stats">';
-			echo get_num_queries();
-			echo ' Queries @ ';
-			timer_stop(1);
-			echo '</div>'; 
-		}
-	} 
 }
 
 function getCurrentCatID(){
@@ -465,7 +435,9 @@ function get_consultations_list_index(){
 			echo '</span>';
 			echo '<span class="export">';
 			echo 'Εξαγωγή Σχολίων σε ';
-			echo '<a href="'.URL.'/?ec='.$cat.'&t=xls"><img src="'.IMG.'/excel.gif" /></a>';
+			echo '<a href="'.URL.'/?ec='.$cat.'&t=xls" title="XLS"><img src="'.IMG.'/excel.gif" /></a>&nbsp;';
+			echo '<a href="'.URL.'/?ec='.$cat.'&t=json" title="JSON"><img src="'.IMG.'/json.png"  width="16px"  /></a>&nbsp;';
+			echo '<a href="'.URL.'/?ec='.$cat.'&t=xml" title="XML"><img src="'.IMG.'/xml.gif" /></a>';
 			echo '</span>';
 			echo '</div>';
 			echo '</div>'; //index_list_item
@@ -532,8 +504,10 @@ function get_consultations_list_index(){
 			echo $cons_comments.' Σχόλια';
 			echo '</span>';
 						echo '<span class="export">';
-			echo 'Εξαγωγή Σχολίων σε ';
-			echo '<a href="'.URL.'/?ec='.$cat.'&t=xls"><img src="'.IMG.'/excel.gif" /></a>';
+			echo 'Εξαγωγή Σχολίων σε &nbsp;';
+			echo '<a href="'.URL.'/?ec='.$cat.'&t=xls" title="XLS"><img src="'.IMG.'/excel.gif" /></a>&nbsp;';
+			echo '<a href="'.URL.'/?ec='.$cat.'&t=json" title="JSON"><img src="'.IMG.'/json.png" width="16px" /></a>&nbsp;';
+			echo '<a href="'.URL.'/?ec='.$cat.'&t=xml" title="XML"><img src="'.IMG.'/xml.gif" /></a>';
 			echo '</span>';
 			echo '<span class="participate blue_spot">';
 			echo '<a href="'.URL.'/?p='.$the_post->ID.'">Δείτε τα Αποτελέσματα!</a>';
@@ -569,13 +543,13 @@ function get_cons_posts_list($p_id,$nav_title){
 				global $post;
 				if ($post->ID == $p_id){
 					echo '<li class="other_posts_nav_current"><span class="list_comments">';
-					comments_popup_link('0 Σχόλια','1 Σχόλιο','% Σχόλια'); 
+					comments_popup_link('0 Σχόλια','1 Σχόλιο','% Σχόλια', '', '0 Σχόλια'); 
 					echo '</span><span class="list_current_title">';
 					the_title(); 
 					echo '</span></li>';
 				}else{
 					echo '<li><span class="list_comments">';
-					comments_popup_link('0 Σχόλια','1 Σχόλιο','% Σχόλια'); 
+					comments_popup_link('0 Σχόλια','1 Σχόλιο','% Σχόλια', '', '0 Σχόλια'); 
 					echo '</span><a class="list_comments_link" href="';
 					the_permalink(); 
 					echo '" title="';
@@ -619,12 +593,8 @@ function redirector(){
 		}
 		wp_reset_query() ;
 	}
-	// Redirect Old Comment Permalinks
-	if ($_GET['option']== 'comment_view'){
-		header("Location: ".URL."/?c=".$_GET[comment_id]);	
-	}
 	if (!empty($_GET['ec'])){
-		include(TEMPLATEPATH."/export_data.php");
+		exporter();
 	}
 }
 

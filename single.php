@@ -128,6 +128,62 @@
 				wp_reset_query() ;
 			}			
 			?>
+			
+			<?php
+			$print_comments =false;
+			$has_comments = get_post_meta($post->ID, 'has_comments', true); 
+			if (((!in_category($options['cat_open'])) && (!in_category($options['cat_close'])) && (!in_category($options['cat_results']))) || ($has_comments==true) )
+				$print_comments =true;
+			
+			if($print_comments){
+				ob_start();
+				comment_form(
+					array(
+						'title_reply'       => 'Σχολιάστε',
+						  'title_reply_to'    => 'Απαντήστε στο σχόλιο ',
+						  'cancel_reply_link' => 'Ακύρωση Απάντησης',
+						'fields' => array(
+							'author' => '<div class="form-group">' . 
+										'<label  for="author">' . __('Όνομα', 'bootstrap-basic') . ($req ? ' <span class="required">*</span>' : '') . '</label> ' .
+										'<input id="author" name="author" type="text" value="' . esc_attr($commenter['comment_author']) . '" size="30"' . $aria_req . ' class="form-control" />' . 
+									
+										'</div>',
+							'email'  => '<div class="form-group">' . 
+										'<label  for="email">' . __('Email', 'bootstrap-basic') . ($req ? ' <span class="required">*</span>' : '') . '</label> ' .
+										'<input id="email" name="email" ' . ($html5 ? 'type="email"' : 'type="text"') . ' value="' . esc_attr($commenter['comment_author_email']) . '" size="30"' . $aria_req . ' class="form-control" />' . 
+										
+										'</div>',
+							'url'    => '<div class="form-group">' . 
+										'<label for="url">' . __('Website', 'bootstrap-basic') . '</label> ' .
+										'<input id="url" name="url" ' . ($html5 ? 'type="url"' : 'type="text"') . ' value="' . esc_attr($commenter['comment_author_url']) . '" size="30" class="form-control" />' . 
+										 
+										'</div>',
+							'acceptterms' => '<div class="form-group">' . 
+								'<input id="acceptterms" name="acceptterms" type="checkbox"  '.$aria_req .' class="required" />  ' .
+								'<label  for="acceptterms">' . __('Αποδέχομαι τους <a href="'.get_permalink(2).'" >όρους συμμετοχής</a> στη διαβούλευση.', 'bootstrap-basic') .  ($req ? ' <span class="required">*</span>' : '') . '</label> ' .
+								'</div>',
+						),
+						'comment_field' => '<div class="form-group">' . 
+										'<label  for="comment">' . _x('Σχόλιο', 'noun') . '</label> ' . 
+										'<textarea id="comment" name="comment" cols="45" rows="8" aria-required="true" class="form-control"></textarea>' . 
+										
+										'</div>',
+					)
+				); 
+				
+				/**
+				 * WordPress comment form does not support action/filter form and input submit elements. Rewrite these code when there is support available.
+				 * @todo Change form class modification to use WordPress hook action/filter when it's available.
+				 * @todo Change input submit class modification to use WordPress hook action/filter when it's available.
+				 */
+				$comment_form = str_replace('class="comment-respond"', 'class="col-sm-12 panel comment-respond" style="margin-top:15px;"', ob_get_clean());
+				//$comment_form = str_replace('class="comment-form"', 'class="comment-form form form-horizontal"', ob_get_clean());
+				$comment_form = preg_replace('#(<input\b[^>]*\s)(type="submit")#i', '$1 type="submit" class="btn btn-primary"', $comment_form);
+				echo $comment_form;	
+				unset($comment_allowed_tags, $comment_form); 
+				}
+			?>
+			
 			<div id="consnav">
 			<?php get_cons_posts_list($post->ID,'Πλοήγηση στη Διαβούλευση'); ?>
 			</div>
@@ -137,8 +193,7 @@
 		
 	</div>	
 <?php 
-	$has_comments = get_post_meta($post->ID, 'has_comments', true); 
-	if (((!in_category($options['cat_open'])) && (!in_category($options['cat_close'])) && (!in_category($options['cat_results']))) || ($has_comments==true) ){ 
+	if($print_comments){ 
 		comments_template(); } 
 	?>
 </div>

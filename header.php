@@ -17,6 +17,10 @@
 	
 	<title><?php headtitles(); ?></title>
 	
+	<?php
+		if ( is_singular() && get_option( 'thread_comments' ) )
+			wp_enqueue_script( 'comment-reply' );
+	?>
 	<?php wp_head(); ?>
 </head>
 
@@ -37,7 +41,7 @@
 			<nav class="navbar og-top-menu" role="navigation">
 			 <form class="navbar-form pull-right" method="get" action="http://opengov.pdm.gov.gr/" role="search">
 				<div class="form-group">
-				  <input type="text" name="s" class="form-control og-search" style=" border-radius: 0px !important;" placeholder="Αναζήτηση.." value="<?php echo get_search_query(); ?>" />
+				  <input type="text" name="s" class="form-control og-search" style=" border-radius: 0px !important;" placeholder="Αναζήτηση.." value="" />
 				</div>
 			</form>
 			

@@ -7,7 +7,6 @@
 			$options['cat_open'] = '';
 			$options['cat_results'] = 0;
 			$options['footer_content'] = '';
-			$options['analytics_content'] = '';
 			$options['logo'] = '';
 			$options['terms'] = '';
 			update_option('consultation_options', $options);
@@ -27,10 +26,7 @@
 			
 			// footer
 			$options['footer_content'] = stripslashes($_POST['footer_content']);
-			
-			// analytics
-			$options['analytics_content'] = stripslashes($_POST['analytics_content']);
-
+		
 			update_option('consultation_options', $options);
 
 		} else {
@@ -149,19 +145,6 @@
 			</tbody>
 		</table>
 
-		<table class="form-table">
-			<tbody>
-				<tr valign="top">
-					<th scope="row">Analytics</th>
-					<td>
-						<label>
-							<textarea name="analytics_content" cols="50" rows="10" id="analytics_content" class="code" style="width:98%;font-size:12px;"><?php echo($options['analytics_content']); ?></textarea>
-						</label>
-					</td>
-				</tr>
-			</tbody>
-		</table>		
-		
 		<p class="submit">
 			<input class="button-primary" type="submit" name="cons_opt_save" value="Αποθήκευση" />
 		</p>

@@ -60,11 +60,6 @@
 				if ($cons<4) { ?>
 					<br /><br />
 					<a href="<?php echo URL; ?>/wp-admin/edit.php?cat=<? echo $cns[1]; ?>">Προσθέστε Περιεχόμενο</a> &raquo;
-					<?php if ( function_exists( 'get_downloads' ) ){ ?>
-						<br /><br />
-						<a href="<?php echo URL; ?>/wp-admin/admin.php?page=dlm_addnew&cat=<? echo $cns[1];  ?>">Ανεβάστε Συνοδευτικά Αρχεία</a> &raquo;
-					<?php } ?>
-					<br /><br /></strong>
 					<a href="<?php echo URL; ?>/?preview=<? echo $cns[1]; ?>">Προεπισκόπηση της Διαβούλευσης</a> &raquo;</strong>
 			<?php } ?>
 		</p></div>
@@ -113,14 +108,12 @@
 						</select>
 						
 						<select id="startdate_year" name="startdate_year" >
-							<option <?php if($defaultyear==2010) echo 'selected="selected"'; ?>>2010</option>
-							<option <?php if($defaultyear==2011) echo 'selected="selected"'; ?>>2011</option>
-							<option <?php if($defaultyear==2012) echo 'selected="selected"'; ?>>2012</option>
-							<option <?php if($defaultyear==2013) echo 'selected="selected"'; ?>>2013</option>
-							<option <?php if($defaultyear==2014) echo 'selected="selected"'; ?>>2014</option>
 							<option <?php if($defaultyear==2015) echo 'selected="selected"'; ?>>2015</option>
 							<option <?php if($defaultyear==2016) echo 'selected="selected"'; ?>>2016</option>
 							<option <?php if($defaultyear==2017) echo 'selected="selected"'; ?>>2017</option>
+							<option <?php if($defaultyear==2018) echo 'selected="selected"'; ?>>2018</option>
+							<option <?php if($defaultyear==2019) echo 'selected="selected"'; ?>>2019</option>
+							<option <?php if($defaultyear==2020) echo 'selected="selected"'; ?>>2020</option>
 						</select>
 						<?php $defaulthour = $defaulthour+2; ?>
 						@ (24Η)<input type="text" size="2" value="<?php echo $defaulthour; ?>" name="startdate_hour" id="startdate_hour" >
@@ -154,14 +147,12 @@
 						</select>
 						
 						<select id="expirationdate_year" name="expirationdate_year" >
-							<option <?php if($defaultyear==2010) echo 'selected="selected"'; ?>>2010</option>
-							<option <?php if($defaultyear==2011) echo 'selected="selected"'; ?>>2011</option>
-							<option <?php if($defaultyear==2012) echo 'selected="selected"'; ?>>2012</option>
-							<option <?php if($defaultyear==2013) echo 'selected="selected"'; ?>>2013</option>
-							<option <?php if($defaultyear==2014) echo 'selected="selected"'; ?>>2014</option>
 							<option <?php if($defaultyear==2015) echo 'selected="selected"'; ?>>2015</option>
 							<option <?php if($defaultyear==2016) echo 'selected="selected"'; ?>>2016</option>
 							<option <?php if($defaultyear==2017) echo 'selected="selected"'; ?>>2017</option>
+							<option <?php if($defaultyear==2018) echo 'selected="selected"'; ?>>2018</option>
+							<option <?php if($defaultyear==2019) echo 'selected="selected"'; ?>>2019</option>
+							<option <?php if($defaultyear==2020) echo 'selected="selected"'; ?>>2020</option>
 						</select>
 						@ (24Η)<input type="text" size="2" value="23" name="expirationdate_hour" id="expirationdate_hour" >
 						:<input type="text" size="2" value="59" name="expirationdate_minute" id="expirationdate_minute" >

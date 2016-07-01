@@ -31,13 +31,7 @@
 			</div>
 		</div>
 	</footer>
-	<div class="ribbon-wrapper"><a href="/beta/"><div class="ribbon">BETA</div></div>
+	<div class="ribbon-wrapper"><a href="/beta/"><div class="ribbon">BETA</div></a></div>
 	<?php wp_footer(); ?>
-	
-<?php 
-	wp_footer(); 
-	//show_wp_stats();
-	echo $options['analytics_content'];
-?>
 </body>
 </html>

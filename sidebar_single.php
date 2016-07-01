@@ -80,8 +80,10 @@
 		</span>
 		<?php if(!is_open($cons_cat->cat_ID)){ ?>
 		<span class="export">
-			Εξαγωγή Σχολίων σε 
-			<a href="<?php echo URL; ?>/?ec=<?php echo $cons_cat->cat_ID; ?>&t=xls"><img src="<?php echo IMG; ?>/excel.gif" /></a>
+			Εξαγωγή Σχολίων σε &nbsp;&nbsp;
+			<a href="<?php echo URL; ?>/?ec=<?php echo $cons_cat->cat_ID; ?>&t=xls" title="XLS"><img src="<?php echo IMG; ?>/excel.gif" /></a>&nbsp;&nbsp;
+			<a href="<?php echo URL; ?>/?ec=<?php echo $cons_cat->cat_ID; ?>&t=json" title="JSON"><img src="<?php echo IMG; ?>/json.png" width="16px" /></a>&nbsp;&nbsp;
+			<a href="<?php echo URL; ?>/?ec=<?php echo $cons_cat->cat_ID; ?>&t=xml" title="XML"><img src="<?php echo IMG; ?>/xml.gif" /></a>
 		</span>
 		<?php } ?>
 		<span class="seperator"></span>
@@ -123,6 +125,7 @@
 			<?php echo $all_comments ; ?> - Όλα τα Σχόλια
 		</span>
 		
+		<?php /*
 		<span class="seperator"></span>
 		
 		<ul class="share_them">
@@ -147,7 +150,7 @@
 				  })();
 				</script>
 			</li>
-		</ul>
+		</ul> */ ?>
 
 		<span class="seperator"></span>
 	

@@ -512,7 +512,7 @@ width:100%;
 
 .comment_list li {
 
-	padding:15px;
+	padding:25px;
 	width:100%;
 	background-color: #FFFFE0;
 	border: 1px solid #CACACA;
@@ -529,26 +529,25 @@ width:100%;
 .comment_list p{
 float:left;
 width:100%;
-margin:5px 0px ;
+margin:10px 0px ;
 }
 
 .comment_list .user{
-padding-bottom:4px;
+padding-bottom:20px;
 border-bottom:1px dotted #CACACA;
 float:left;
 width:100%;
 }
 
 .comment_list .user .author{
-width:580px;
+width:55%;
 float:left;
-
 }
 
 
 .comment_list .user .meta-comment{
 float:right;
-width:380px;
+width:45%;
 }
 
 .comment_list .user .meta-comment a.permalink{
@@ -563,8 +562,16 @@ width:380px;
 float:left;
 }
 
-.comment_list .user .meta-comment .rate img{
-	vertical-align:middle;
+.icon-thumbs-up:before,
+.icon-thumbs-down:before{
+	font-weight:bold;
+	font-size:16px;
+}
+
+.vortex-p-like-counter-comment ,
+.vortex-p-dislike-counter-comment {
+	font-size:14px !important;
+	font-weight:normal;
 }
 
 .comment_nav{
@@ -1070,4 +1077,15 @@ footer .credits {
 }
 .ribbon:after {
   right: 0;
+}
+
+ul.children {
+    list-style: none;
+    margin-top: 20px;
+}
+
+.comment-respond {
+    background: #ffffe0 none repeat scroll 0 0;
+    border-radius: 0;
+    padding: 10px 40px;
 }

@@ -11,8 +11,8 @@
 			}
 		}
 	?>
-
-	<?php if (have_comments()) { ?>
+	
+		<?php if (have_comments()) { ?>
 		<div class="comment_nav">
 			<div class="nav">
 				Σχόλια <?php paginate_comments_links( array('prev_text' => '&laquo;', 'next_text' => '&raquo;') ); ?>
@@ -31,8 +31,7 @@
 		</div>
 		
 	<?php }  ?>
-	
-	<?php if ('open' == $post->comment_status) { ?> 
+	<?php /* if ('open' == $post->comment_status) { ?> 
 	<div id="respond" class="form_land">	
 		<div class="comment_form">
 			<h3 class="comment_on">Σχολιάστε</h3>
@@ -65,7 +64,7 @@
 
 				<p>
 					<input name="SubmitComment" type="submit" class="SubmitComment"  title="Post Your Comment" value="Υποβολή του Σχολίου" alt="Υποβολή του Σχολίου" />
-					<input type="hidden" name="comment_post_ID" value="<?php echo $id; ?>" />
+					<?php comment_id_fields(); ?>
 				</p>
 				<?php do_action('comment_form', $post->ID); ?>
 			</form>
@@ -78,6 +77,6 @@
 			<?php echo $terms->post_content; ?>
 		</div>
 	</div>
-	<?php } ?>
+	<?php } */ ?>
 		
 </div>
